@@ -1,0 +1,11 @@
+server:
+    name: "simple-rbac-service"
+    host: "0.0.0.0"
+    port: 1010
+postgre:
+    rbac:
+        readwrite:
+            connString: "postgres://postgres:postgres@rbac-pg-14:5432/database?sslmode=disable"
+            maxOpenConn: 350
+            maxIdleConn: 10
+            maxConnLifeTimeInSecond: 10

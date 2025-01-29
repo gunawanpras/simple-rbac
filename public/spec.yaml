@@ -1,0 +1,958 @@
+openapi: 3.0.0
+info:
+  title: Role-Based Access Control API
+  version: 1.0.0
+  description: API for managing users, roles, and permissions in a role-based access control system.
+servers:
+  - url: http://localhost:8080
+    description: Development Server
+
+tags:
+  - name: Users
+    description: Endpoints related to user management.
+  - name: Roles
+    description: Endpoints related to role management.
+  - name: Permissions
+    description: Endpoints related to permission management.
+  - name: Role Permissions
+    description: Endpoints related to assigning permissions to roles.
+
+paths:
+  /users:
+    post:
+      summary: Create User
+      tags:
+        - Users
+      description: Add a new user to the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+      responses:
+        '201':
+          description: User created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: User created successfully.
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 550e8400-e29b-41d4-a716-446655440001
+        '400':
+          description: Bad Request - Invalid request body.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Missing required field 'email'.
+        '500':
+          description: Internal Server Error - An unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: An unexpected error occurred while processing the request.
+    get:
+      summary: List Users
+      tags:
+        - Users
+      description: Retrieve a list of all users.
+      parameters: []
+      responses:
+        '200':
+          description: List of users.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: List of users retrieved successfully.
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request - Invalid query parameters.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Invalid query parameter 'sort'.
+        '404':
+          description: Not Found - The requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: No users found.
+        '500':
+          description: Internal Server Error - An unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: An unexpected error occurred while processing the request.    
+  /users/{id}:
+    get:
+      summary: Get User by ID
+      tags:
+        - Users
+      description: Retrieve details of a specific user by their unique identifier.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The UUID of the user to retrieve.
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: User details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: User retrieved successfully.
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 550e8400-e29b-41d4-a716-446655440000
+                      name:
+                        type: string
+                        example: John Doe
+                      email:
+                        type: string
+                        example: johndoe@example.com
+                      role:
+                        type: string
+                        example: Admin
+        '400':
+          description: Bad Request - Invalid UUID format.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Invalid user ID format.
+        '404':
+          description: User Not Found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: User not found.
+        '500':
+          description: Internal Server Error - An unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: An unexpected error occurred while processing the request.
+  
+  /roles:
+    post:
+      summary: Create Role
+      tags:
+        - Roles
+      description: Add a new role to the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Admin
+              required:
+                - name
+      responses:
+        '201':
+          description: Role created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Role created successfully.
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 550e8400-e29b-41d4-a716-446655440001
+        '400':
+          description: Bad Request - Invalid request body.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Missing required field 'name'.
+        '500':
+          description: Internal Server Error - An unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: An unexpected error occurred while processing the request.
+    get:
+      summary: List Roles
+      tags:
+        - Roles
+      description: Retrieve a list of all roles.
+      parameters: []
+      responses:
+        '200':
+          description: List of roles.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: List of roles retrieved successfully.
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Role'
+        '400':
+          description: Bad Request - Invalid query parameters.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Invalid query parameter 'filter'.
+        '404':
+          description: Not Found - The requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: No roles found.
+        '500':
+          description: Internal Server Error - An unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: An unexpected error occurred while processing the request.
+  /roles/{id}:
+    get:
+      summary: Get Role by ID
+      tags:
+        - Roles
+      description: Retrieve details of a specific role by its unique identifier.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The UUID of the role to retrieve.
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Role details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Role retrieved successfully.
+                  data:
+                    $ref: '#/components/schemas/Role'
+        '400':
+          description: Bad Request - Invalid UUID format.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Invalid role ID format.
+        '404':
+          description: Role Not Found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Role not found.
+        '500':
+          description: Internal Server Error - An unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: An unexpected error occurred while processing the request.
+
+  /permissions:
+    post:
+      summary: Create Permission
+      tags:
+        - Permissions
+      description: Add a new permission to the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Manage Users
+                description:
+                  type: string
+                  example: Permission to create, update, and delete users.
+              required:
+                - name
+                - description
+      responses:
+        '201':
+          description: Permission created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Permission created successfully.
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 550e8400-e29b-41d4-a716-446655440002
+        '400':
+          description: Bad Request - Invalid request body.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Missing required fields 'name' or 'description'.
+        '500':
+          description: Internal Server Error - An unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: An unexpected error occurred while processing the request.
+    get:
+      summary: List Permissions
+      tags:
+        - Permissions
+      description: Retrieve a list of all permissions.
+      parameters: []
+      responses:
+        '200':
+          description: List of permissions.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: List of permissions retrieved successfully.
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Permission'
+        '400':
+          description: Bad Request - Invalid query parameters.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Invalid query parameter 'limit'.
+        '404':
+          description: Not Found - The requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: No permissions found.
+        '500':
+          description: Internal Server Error - An unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: An unexpected error occurred while processing the request.
+  /permissions/{id}:
+    get:
+      summary: Get Permission by ID
+      tags:
+        - Permissions
+      description: Retrieve details of a specific permission by its unique identifier.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The UUID of the permission to retrieve.
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Permission details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Permission retrieved successfully.
+                  data:
+                    $ref: '#/components/schemas/Permission'
+        '400':
+          description: Bad Request - Invalid UUID format.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Invalid permission ID format.
+        '404':
+          description: Permission Not Found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Permission not found.
+        '500':
+          description: Internal Server Error - An unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: An unexpected error occurred while processing the request.
+
+  /role-permissions:
+    post:
+      summary: Create Role Permission
+      tags:
+        - Role Permissions
+      description: Assign a permission to a role.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roleId:
+                  type: string
+                  format: uuid
+                  example: 550e8400-e29b-41d4-a716-446655440001
+                permissionId:
+                  type: string
+                  format: uuid
+                  example: 550e8400-e29b-41d4-a716-446655440002
+              required:
+                - roleId
+                - permissionId
+      responses:
+        '201':
+          description: Role permission created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Role permission created successfully.
+        '400':
+          description: Bad Request - Invalid request body.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Missing required fields 'roleId' or 'permissionId'.
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: An unexpected error occurred while processing the request.
+    get:
+      summary: List Role Permissions
+      tags:
+        - Role Permissions
+      description: Retrieve a list of all role permissions.
+      responses:
+        '200':
+          description: List of role permissions.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: List of role permissions retrieved successfully.
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        roleId:
+                          type: string
+                          format: uuid
+                          example: 550e8400-e29b-41d4-a716-446655440001
+                        permissionId:
+                          type: string
+                          format: uuid
+                          example: 550e8400-e29b-41d4-a716-446655440002
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: An unexpected error occurred while processing the request.
+    
+  /role-permissions/{roleId}:
+    get:
+      summary: List Role Permissions by Role ID
+      tags:
+        - Role Permissions
+      description: Retrieve a list of all permissions assigned to a specific role.
+      parameters:
+        - name: roleId
+          in: path
+          required: true
+          description: The UUID of the role.
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: List of permissions for the specified role.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Role permissions retrieved successfully.
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        permissionId:
+                          type: string
+                          format: uuid
+                          example: 550e8400-e29b-41d4-a716-446655440002
+        '400':
+          description: Bad Request - Invalid role ID format.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Invalid role ID format.
+        '404':
+          description: Role not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Role not found.
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: An unexpected error occurred while processing the request.
+
+  /role-permissions/{roleId}/permissions/{permissionId}:
+    get:
+      summary: Get Role Permission by Permission ID
+      tags:
+        - Role Permissions
+      description: Retrieve a specific role permission by role and permission ID.
+      parameters:
+        - name: roleId
+          in: path
+          required: true
+          description: The UUID of the role.
+          schema:
+            type: string
+            format: uuid
+        - name: permissionId
+          in: path
+          required: true
+          description: The UUID of the permission.
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Role permission details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Role permission retrieved successfully.
+                  data:
+                    type: object
+                    properties:
+                      roleId:
+                        type: string
+                        format: uuid
+                        example: 550e8400-e29b-41d4-a716-446655440001
+                      permissionId:
+                        type: string
+                        format: uuid
+                        example: 550e8400-e29b-41d4-a716-446655440002
+        '400':
+          description: Bad Request - Invalid UUID format.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Invalid role ID or permission ID format.
+        '404':
+          description: Role permission not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Role permission not found.
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: An unexpected error occurred while processing the request.
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440000
+        name:
+          type: string
+          example: John Doe
+        email:
+          type: string
+          example: johndoe@example.com
+    Role:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440001
+        name:
+          type: string
+          example: Admin
+    Permission:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440002
+        name:
+          type: string
+          example: Manage Users
+        description:
+          type: string
+          example: Permission to create, update, and delete users.
+    CreateUserRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Jane Doe
+        email:
+          type: string
+          example: janedoe@example.com
+        password:
+          type: string
+          example: securepassword123
+        roleId:
+          type: string
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440001
+      required:
+        - name
+        - email
+        - password
+        - roleId
