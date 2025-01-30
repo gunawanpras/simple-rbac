@@ -1,24 +1,54 @@
 package server
 
 import (
-	rbacRepo "github.com/gunawanpras/simple-rbac/internal/domain/rbac/repository"
-	rbacRepoPg "github.com/gunawanpras/simple-rbac/internal/domain/rbac/repository/postgres"
+	permissionRepo "github.com/gunawanpras/simple-rbac/internal/domain/permission/repository"
+	permissionRepoPg "github.com/gunawanpras/simple-rbac/internal/domain/permission/repository/postgres"
+	rolePermissionRepo "github.com/gunawanpras/simple-rbac/internal/domain/role-permission/repository"
+	rolePermissionPg "github.com/gunawanpras/simple-rbac/internal/domain/role-permission/repository/postgres"
+	roleRepo "github.com/gunawanpras/simple-rbac/internal/domain/role/repository"
+	roleRepoPg "github.com/gunawanpras/simple-rbac/internal/domain/role/repository/postgres"
+	userRepo "github.com/gunawanpras/simple-rbac/internal/domain/user/repository"
+	userRepoPg "github.com/gunawanpras/simple-rbac/internal/domain/user/repository/postgres"
 	"github.com/jmoiron/sqlx"
 )
 
 type Repository struct {
-	RbacRepository rbacRepo.Repository
+	UserRepository           userRepo.Repository
+	RoleRepository           roleRepo.Repository
+	PermissionRepository     permissionRepo.Repository
+	RolePermissionRepository rolePermissionRepo.Repository
 }
 
 func NewRepository(db *sqlx.DB) Repository {
 
-	rbacRepository := rbacRepoPg.New(rbacRepoPg.InitAttribute{
-		DB: rbacRepoPg.DB{
+	userRepository := userRepoPg.New(userRepoPg.InitAttribute{
+		DB: userRepoPg.DB{
+			Db: db,
+		},
+	})
+
+	roleRepository := roleRepoPg.New(roleRepoPg.InitAttribute{
+		DB: roleRepoPg.DB{
+			Db: db,
+		},
+	})
+
+	permissionRepository := permissionRepoPg.New(permissionRepoPg.InitAttribute{
+		DB: permissionRepoPg.DB{
+			Db: db,
+		},
+	})
+
+	rolePermissionRepository := rolePermissionPg.New(rolePermissionPg.InitAttribute{
+		DB: rolePermissionPg.DB{
 			Db: db,
 		},
 	})
 
 	return Repository{
-		RbacRepository: rbacRepository,
+		UserRepository:           userRepository,
+		RoleRepository:           roleRepository,
+		PermissionRepository:     permissionRepository,
+		RolePermissionRepository: rolePermissionRepository,
 	}
 }
