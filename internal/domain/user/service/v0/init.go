@@ -4,12 +4,12 @@ import "log"
 
 // New creates a new UserService with the given InitAttribute.
 // It will panic if the InitAttribute is invalid.
-func New(attr InitAttribute) *RbacService {
+func New(attr InitAttribute) *UserService {
 	if !checkRepository(attr.Repo) {
 		log.Panicf("[RbacService][New] missing repo %+v", attr.Repo)
 	}
 
-	return &RbacService{
+	return &UserService{
 		repo:   attr.Repo,
 		config: attr.Config,
 	}

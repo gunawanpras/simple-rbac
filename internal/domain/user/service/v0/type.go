@@ -11,7 +11,7 @@ type (
 
 	Config struct{}
 
-	RbacService struct {
+	UserService struct {
 		repo   RepoAttribute
 		config Config
 	}

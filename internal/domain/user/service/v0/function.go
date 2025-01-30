@@ -10,7 +10,7 @@ import (
 	"github.com/gunawanpras/simple-rbac/util/constant"
 )
 
-func (service *RbacService) CreateUser(ctx context.Context, name, email, password string, roleId uuid.UUID) (res model.ServiceResponse, err error) {
+func (service *UserService) CreateUser(ctx context.Context, name, email, password string, roleId uuid.UUID) (res model.ServiceResponse, err error) {
 	user, err := service.repo.UserRepo.GetUserByEmail(ctx, email)
 	if err != nil {
 		if err.Error() != constant.DbRecordNotFound {
@@ -51,7 +51,7 @@ func (service *RbacService) CreateUser(ctx context.Context, name, email, passwor
 	return res, nil
 }
 
-func (service *RbacService) ListUsers(ctx context.Context) (res model.ServiceResponse, err error) {
+func (service *UserService) ListUsers(ctx context.Context) (res model.ServiceResponse, err error) {
 	users, err := service.repo.UserRepo.ListUsers(ctx)
 	if err != nil {
 		return model.ServiceResponse{
@@ -67,7 +67,7 @@ func (service *RbacService) ListUsers(ctx context.Context) (res model.ServiceRes
 	return res, nil
 }
 
-func (service *RbacService) GetUserByID(ctx context.Context, id uuid.UUID) (res model.ServiceResponse, err error) {
+func (service *UserService) GetUserByID(ctx context.Context, id uuid.UUID) (res model.ServiceResponse, err error) {
 	user, err := service.repo.UserRepo.GetUserByID(ctx, id)
 	if err != nil {
 		return model.ServiceResponse{
