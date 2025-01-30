@@ -22,6 +22,7 @@ func Up(handler Handler, config config.ServerConfig) {
 	app.Use(cors.New())
 
 	NewRouter(app, handler)
+
 	err := app.Listen(fmt.Sprintf(":%d", config.Port))
 	if err != nil {
 		log.Panic(err)

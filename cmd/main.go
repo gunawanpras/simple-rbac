@@ -11,11 +11,14 @@ func main() {
 	config.Init(config.WithConfigFile("config"), config.WithConfigType("yaml"))
 	conf := config.Get()
 
-	// init server
+	// init database
 	postgre := postgres.NewInstance(conf)
+
+	// init repo, service and handler
 	repository := server.NewRepository(postgre)
 	service := server.NewService(repository)
 	handler := server.NewHandler(service)
 
+	// init server
 	server.Up(handler, conf.Server)
 }
