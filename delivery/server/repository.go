@@ -1,14 +1,14 @@
 package server
 
 import (
-	permissionRepo "github.com/gunawanpras/simple-rbac/internal/domain/permission/repository"
-	permissionRepoPg "github.com/gunawanpras/simple-rbac/internal/domain/permission/repository/postgres"
-	rolePermissionRepo "github.com/gunawanpras/simple-rbac/internal/domain/role-permission/repository"
-	rolePermissionPg "github.com/gunawanpras/simple-rbac/internal/domain/role-permission/repository/postgres"
-	roleRepo "github.com/gunawanpras/simple-rbac/internal/domain/role/repository"
-	roleRepoPg "github.com/gunawanpras/simple-rbac/internal/domain/role/repository/postgres"
-	userRepo "github.com/gunawanpras/simple-rbac/internal/domain/user/repository"
-	userRepoPg "github.com/gunawanpras/simple-rbac/internal/domain/user/repository/postgres"
+	permissionRepoPg "github.com/gunawanpras/simple-rbac/internal/adapter/permission/repository/postgres"
+	rolePermissionPg "github.com/gunawanpras/simple-rbac/internal/adapter/role-permission/repository/postgres"
+	roleRepoPg "github.com/gunawanpras/simple-rbac/internal/adapter/role/repository/postgres"
+	userRepoPg "github.com/gunawanpras/simple-rbac/internal/adapter/user/repository/postgres"
+	permissionRepo "github.com/gunawanpras/simple-rbac/internal/core/permission/port"
+	rolePermissionRepo "github.com/gunawanpras/simple-rbac/internal/core/role-permission/port"
+	roleRepo "github.com/gunawanpras/simple-rbac/internal/core/role/port"
+	userRepo "github.com/gunawanpras/simple-rbac/internal/core/user/port"
 	"github.com/jmoiron/sqlx"
 )
 

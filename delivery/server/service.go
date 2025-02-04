@@ -1,14 +1,14 @@
 package server
 
 import (
-	permissionService "github.com/gunawanpras/simple-rbac/internal/domain/permission/service"
-	permissionServiceV0 "github.com/gunawanpras/simple-rbac/internal/domain/permission/service/v0"
-	rolePermissionService "github.com/gunawanpras/simple-rbac/internal/domain/role-permission/service"
-	rolePermissionServiceV0 "github.com/gunawanpras/simple-rbac/internal/domain/role-permission/service/v0"
-	roleService "github.com/gunawanpras/simple-rbac/internal/domain/role/service"
-	roleServiceV0 "github.com/gunawanpras/simple-rbac/internal/domain/role/service/v0"
-	userService "github.com/gunawanpras/simple-rbac/internal/domain/user/service"
-	userServiceV0 "github.com/gunawanpras/simple-rbac/internal/domain/user/service/v0"
+	permissionService "github.com/gunawanpras/simple-rbac/internal/core/permission/port"
+	permissionServiceV0 "github.com/gunawanpras/simple-rbac/internal/core/permission/service/v0"
+	rolePermissionService "github.com/gunawanpras/simple-rbac/internal/core/role-permission/port"
+	rolePermissionServiceV0 "github.com/gunawanpras/simple-rbac/internal/core/role-permission/service/v0"
+	roleService "github.com/gunawanpras/simple-rbac/internal/core/role/port"
+	roleServiceV0 "github.com/gunawanpras/simple-rbac/internal/core/role/service/v0"
+	userService "github.com/gunawanpras/simple-rbac/internal/core/user/port"
+	userServiceV0 "github.com/gunawanpras/simple-rbac/internal/core/user/service/v0"
 )
 
 type Service struct {

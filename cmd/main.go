@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/gunawanpras/simple-rbac/config"
 	"github.com/gunawanpras/simple-rbac/delivery/server"
-	"github.com/gunawanpras/simple-rbac/infrastructure/database/postgres"
+	"github.com/gunawanpras/simple-rbac/setup"
 )
 
 func main() {
@@ -11,11 +11,12 @@ func main() {
 	config.Init(config.WithConfigFile("config"), config.WithConfigType("yaml"))
 	conf := config.Get()
 
-	// init database
-	postgre := postgres.NewInstance(conf)
+	// init external services
+	externalService := setup.InitExternalServices(conf)
+	defer externalService.Postgres.Close()
 
 	// init repo, service and handler
-	repository := server.NewRepository(postgre)
+	repository := server.NewRepository(externalService.Postgres)
 	service := server.NewService(repository)
 	handler := server.NewHandler(service)
 

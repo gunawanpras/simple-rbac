@@ -7,8 +7,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gunawanpras/simple-rbac/config"
-	"github.com/gunawanpras/simple-rbac/helper/response"
-	"github.com/gunawanpras/simple-rbac/util/constant"
+	"github.com/gunawanpras/simple-rbac/pkg/response"
+	"github.com/gunawanpras/simple-rbac/pkg/util/constant"
 )
 
 func Up(handler Handler, config config.ServerConfig) {
