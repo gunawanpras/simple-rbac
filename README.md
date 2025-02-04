@@ -101,4 +101,4 @@ curl --location 'localhost:8080/users' \
 
 ## License
 
-MIT License – You are free to use and modify this project while giving credit to the original author.
+GNU Public License 3.0 - The GPL 3.0 license requires that any software that uses or modifies the licensed code must also be made available under the same GPL 3.0 license, ensuring that the software remains free and open-source, with users having the freedom to use, modify, and distribute it.
