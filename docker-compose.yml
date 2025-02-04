@@ -23,7 +23,7 @@ services:
       # Load database schema from ./database.sql
       # If you want to reload new database schema, you need to execute
       # `docker-compose down --volumes` first to remove the volume.
-      - ./database.sql:/docker-entrypoint-initdb.d/database.sql
+      - ./database/postgresql/database.sql:/docker-entrypoint-initdb.d/database.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s

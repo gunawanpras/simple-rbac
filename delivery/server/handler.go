@@ -1,14 +1,10 @@
 package server
 
 import (
-	permission "github.com/gunawanpras/simple-rbac/internal/domain/permission/handler"
-	permissionHttp "github.com/gunawanpras/simple-rbac/internal/domain/permission/handler/http"
-	rolePermission "github.com/gunawanpras/simple-rbac/internal/domain/role-permission/handler"
-	rolePermissionHttp "github.com/gunawanpras/simple-rbac/internal/domain/role-permission/handler/http"
-	role "github.com/gunawanpras/simple-rbac/internal/domain/role/handler"
-	roleHttp "github.com/gunawanpras/simple-rbac/internal/domain/role/handler/http"
-	user "github.com/gunawanpras/simple-rbac/internal/domain/user/handler"
-	userHttp "github.com/gunawanpras/simple-rbac/internal/domain/user/handler/http"
+	permission "github.com/gunawanpras/simple-rbac/internal/adapter/permission/http/handler"
+	rolePermission "github.com/gunawanpras/simple-rbac/internal/adapter/role-permission/http/handler"
+	role "github.com/gunawanpras/simple-rbac/internal/adapter/role/http/handler"
+	user "github.com/gunawanpras/simple-rbac/internal/adapter/user/http/handler"
 )
 
 type Handler struct {
@@ -20,9 +16,9 @@ type Handler struct {
 
 func NewHandler(service Service) Handler {
 	return Handler{
-		userHandler:           userHttp.New(userHttp.InitAttribute{Service: userHttp.ServiceAttribute{UserService: service.UserService}}),
-		roleHandler:           roleHttp.New(roleHttp.InitAttribute{Service: roleHttp.ServiceAttribute{RoleService: service.RoleService}}),
-		permissionHandler:     permissionHttp.New(permissionHttp.InitAttribute{Service: permissionHttp.ServiceAttribute{PermissionService: service.PermissionService}}),
-		rolePermissionHandler: rolePermissionHttp.New(rolePermissionHttp.InitAttribute{Service: rolePermissionHttp.ServiceAttribute{RolePermissionService: service.RolePermissionService}}),
+		userHandler:           user.New(user.InitAttribute{Service: user.ServiceAttribute{UserService: service.UserService}}),
+		roleHandler:           role.New(role.InitAttribute{Service: role.ServiceAttribute{RoleService: service.RoleService}}),
+		permissionHandler:     permission.New(permission.InitAttribute{Service: permission.ServiceAttribute{PermissionService: service.PermissionService}}),
+		rolePermissionHandler: rolePermission.New(rolePermission.InitAttribute{Service: rolePermission.ServiceAttribute{RolePermissionService: service.RolePermissionService}}),
 	}
 }
