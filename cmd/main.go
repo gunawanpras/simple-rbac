@@ -15,11 +15,9 @@ func main() {
 	externalService := setup.InitExternalServices(conf)
 	defer externalService.Postgres.Close()
 
-	// init repo, service and handler
-	repository := server.NewRepository(externalService.Postgres)
-	service := server.NewService(repository)
-	handler := server.NewHandler(service)
+	// init core services
+	coreService := setup.InitCoreServices(externalService)
 
 	// init server
-	server.Up(handler, conf.Server)
+	server.Up(coreService.Handler, conf.Server)
 }
