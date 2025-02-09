@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/gunawanpras/simple-rbac/config"
 	"github.com/gunawanpras/simple-rbac/delivery/server"
-	"github.com/gunawanpras/simple-rbac/setup"
+	"github.com/gunawanpras/simple-rbac/internal/setup"
 )
 
 func main() {

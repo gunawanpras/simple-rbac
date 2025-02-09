@@ -2,7 +2,6 @@ package setup
 
 import (
 	"github.com/gunawanpras/simple-rbac/config"
-	"github.com/gunawanpras/simple-rbac/delivery/server"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -11,7 +10,7 @@ type ExternalServices struct {
 }
 
 type CoreServices struct {
-	Handler server.Handler
+	Handler Handler
 }
 
 func InitExternalServices(conf *config.Config) *ExternalServices {
@@ -23,9 +22,9 @@ func InitExternalServices(conf *config.Config) *ExternalServices {
 }
 
 func InitCoreServices(externalService *ExternalServices) *CoreServices {
-	repository := server.NewRepository(externalService.Postgres)
-	service := server.NewService(repository)
-	handler := server.NewHandler(service)
+	repository := NewRepository(externalService.Postgres)
+	service := NewService(repository)
+	handler := NewHandler(service)
 
 	return &CoreServices{
 		Handler: handler,

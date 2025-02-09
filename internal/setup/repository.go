@@ -1,4 +1,4 @@
-package server
+package setup
 
 import (
 	permissionRepoPg "github.com/gunawanpras/simple-rbac/internal/adapter/permission/repository/postgres"

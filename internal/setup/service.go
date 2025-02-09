@@ -1,4 +1,4 @@
-package server
+package setup
 
 import (
 	permissionService "github.com/gunawanpras/simple-rbac/internal/core/permission/port"
