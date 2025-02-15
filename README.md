@@ -1,8 +1,11 @@
-# Simple RBAC Service
+# Simple CRUD RBAC Service
 
 ## Overview
 
 The **Simple CRUD RBAC Service** is a lightweight role-based access control (RBAC) system built with Go. It allows managing users, roles, and permissions efficiently, ensuring that only authorized users can access specific resources. This service is useful for applications that require fine-grained access control without relying on heavyweight frameworks.
+
+## Features
+1. Hexagonal architecture
 
 ## How It Works
 
