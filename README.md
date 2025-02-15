@@ -2,7 +2,7 @@
 
 ## Overview
 
-The **Simple RBAC Service** is a lightweight role-based access control (RBAC) system built with Go. It allows managing users, roles, and permissions efficiently, ensuring that only authorized users can access specific resources. This service is useful for applications that require fine-grained access control without relying on heavyweight frameworks.
+The **Simple CRUD RBAC Service** is a lightweight role-based access control (RBAC) system built with Go. It allows managing users, roles, and permissions efficiently, ensuring that only authorized users can access specific resources. This service is useful for applications that require fine-grained access control without relying on heavyweight frameworks.
 
 ## How It Works
 
@@ -12,51 +12,6 @@ The **Simple RBAC Service** is a lightweight role-based access control (RBAC) sy
 
 ## Database Design
 https://dbdiagram.io/d/rbac-610241892ecb310fc3b4c107
-
-### Key Components of the Schema:
-
-1. **Users**<br>
-    Fields:<br>
-        - **id**: Primary key, uniquely identifies each user.<br>
-        - **username**: User's chosen display name.<br>
-        - **role_id**: Foreign key referencing roles.id, indicating the user's role.<br>
-        - **created_at**: Timestamp of when the user account was created.<br>
-
-2. **Roles**<br>
-    Fields:<br>
-        - **id**: Primary key, uniquely identifies each role.<br>
-        - **name**: Name of the role (e.g., admin, user).<br>
-        - **description**: Description of the role's responsibilities.<br>
-        - **created_at**: Timestamp of when the role was created.
-
-3. **Permissions**<br>
-    Fields:<br>
-        - **id**: Primary key, uniquely identifies each permission. <br>
-        - **name**: Name of the permission (e.g., read, write).<br>
-        - **description**: Description of what the permission allows.<br>
-        - **created_at**: Timestamp of when the permission was created.<br>
-
-4. **Role_Permissions**<br>
-    Fields:<br>
-        - **role_id**: Foreign key referencing roles.id, indicating the role.<br>
-        - **permission_id**: Foreign key referencing permissions.id, indicating the permission.<br>
-        - **created_at**: Timestamp of when the role-permission relationship was established.
-
-### Relationships and Functionality:
-
-- Users to Roles:
-    A many-to-one relationship where each user is assigned a single role. This is represented by the foreign key role_id in the Users table referencing roles.id.
-
-- Roles to Permissions:
-    A many-to-many relationship facilitated by the Role_Permissions table, where each role can have multiple permissions, and each permission can be assigned to multiple roles.
-
-### Advantages of This Design:
-
-**Simplified Permission Management**: By assigning permissions to roles rather than individual users, the system streamlines the process of managing user access. Changes in permissions can be made at the role level, automatically propagating to all users assigned to that role.
-
-**Enhanced Security**: This approach ensures that users have access only to the resources necessary for their job functions, adhering to the principle of least privilege.
-
-**Scalability**: As organizations grow, this design allows for easy addition of new roles and permissions without extensive modifications to the user base.
 
 ## Getting Started
 
